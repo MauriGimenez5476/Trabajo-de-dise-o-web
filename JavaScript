@@ -1,0 +1,166 @@
+// Datos iniciales (puedes usar Local Storage para persistirlos)
+let docentes = [];
+let materias = [];
+
+// Función para inicializar la página
+function inicializarPagina() {
+    // Cargar datos de docentes desde Local Storage
+    const docentesGuardados = localStorage.getItem('docentes');
+    if (docentesGuardados) {
+        docentes = JSON.parse(docentesGuardados);
+    }
+
+    // Cargar datos de materias desde Local Storage
+    const materiasGuardadas = localStorage.getItem('materias');
+    if (materiasGuardadas) {
+        materias = JSON.parse(materiasGuardadas);
+    }
+
+    // Mostrar los docentes y materias en las tablas
+    mostrarDocentes();
+    mostrarMaterias();
+}
+
+// Event listener para el formulario de docentes
+document.getElementById('docente-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const nombre = document.getElementById('nombre').value;
+    const apellido = document.getElementById('apellido').value;
+    const correo = document.getElementById('correo').value; // Nuevo campo de correo
+    // Agregar docente a la lista
+    const nuevoDocente = { id: docentes.length + 1, nombre, apellido, correo }; // Añadimos el correo
+    docentes.push(nuevoDocente);
+    guardarDatosEnLocalStorage('docentes', docentes); // Guardar en Local Storage
+    mostrarDocentes();
+});
+
+// Event listener para la tabla de docentes (delegación de eventos)
+document.getElementById('docentes-list').addEventListener('click', function (e) {
+    if (e.target.classList.contains('btn-editar')) {
+        const fila = e.target.closest('tr');
+        const idDocente = parseInt(fila.querySelector('.docente-id').textContent);
+        const nombreDocente = fila.querySelector('.docente-nombre').textContent;
+        const apellidoDocente = fila.querySelector('.docente-apellido').textContent;
+        const correoDocente = fila.querySelector('.docente-correo').textContent; // Nuevo campo de correo
+        const nuevoNombre = prompt('Editar nombre del docente:', nombreDocente);
+        const nuevoApellido = prompt('Editar apellido del docente:', apellidoDocente);
+        const nuevoCorreo = prompt('Editar correo del docente:', correoDocente); // Nuevo prompt para el correo
+        if (nuevoNombre !== null && nuevoApellido !== null && nuevoCorreo !== null) {
+            // Encontrar el índice del docente en el arreglo
+            const index = docentes.findIndex(docente => docente.id === idDocente);
+            if (index !== -1) {
+                // Actualizar el nombre, apellido y correo del docente
+                docentes[index].nombre = nuevoNombre;
+                docentes[index].apellido = nuevoApellido;
+                docentes[index].correo = nuevoCorreo; // Actualizamos el correo
+                // Guardar en Local Storage
+                guardarDatosEnLocalStorage('docentes', docentes);
+                // Actualizar la tabla de docentes
+                mostrarDocentes();
+            }
+        }
+    } else if (e.target.classList.contains('btn-eliminar')) {
+        const confirmacion = confirm('¿Estás seguro de que quieres eliminar este docente?');
+        if (confirmacion) {
+            const fila = e.target.closest('tr');
+            const idDocente = parseInt(fila.querySelector('.docente-id').textContent);
+            // Filtrar el docente a eliminar
+            docentes = docentes.filter(docente => docente.id !== idDocente);
+            // Guardar en Local Storage
+            guardarDatosEnLocalStorage('docentes', docentes);
+            // Actualizar la tabla de docentes
+            mostrarDocentes();
+        }
+    }
+});
+
+// Event listener para el formulario de materias
+document.getElementById('materia-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const materiaNombre = document.getElementById('materia-nombre').value;
+    // Agregar materia a la lista
+    const nuevaMateria = { id: materias.length + 1, nombre: materiaNombre };
+    materias.push(nuevaMateria);
+    guardarDatosEnLocalStorage('materias', materias); // Guardar en Local Storage
+    mostrarMaterias();
+});
+
+// Event listener para la tabla de materias (delegación de eventos)
+document.getElementById('materias-list').addEventListener('click', function (e) {
+    if (e.target.classList.contains('btn-editar')) {
+        const fila = e.target.closest('tr');
+        const idMateria = parseInt(fila.querySelector('.materia-id').textContent);
+        const nombreMateria = fila.querySelector('.materia-nombre').textContent;
+        const nuevoNombre = prompt('Editar nombre de la materia:', nombreMateria);
+        if (nuevoNombre !== null) {
+            // Encontrar el índice de la materia en el arreglo
+            const index = materias.findIndex(materia => materia.id === idMateria);
+            if (index !== -1) {
+                // Actualizar el nombre de la materia
+                materias[index].nombre = nuevoNombre;
+                // Guardar en Local Storage
+                guardarDatosEnLocalStorage('materias', materias);
+                // Actualizar la tabla de materias
+                mostrarMaterias();
+            }
+        }
+    } else if (e.target.classList.contains('btn-eliminar')) {
+        const confirmacion = confirm('¿Estás seguro de que quieres eliminar esta materia?');
+        if (confirmacion) {
+            const fila = e.target.closest('tr');
+            const idMateria = parseInt(fila.querySelector('.materia-id').textContent);
+            // Filtrar la materia a eliminar
+            materias = materias.filter(materia => materia.id !== idMateria);
+            // Guardar en Local Storage
+            guardarDatosEnLocalStorage('materias', materias);
+            // Actualizar la tabla de materias
+            mostrarMaterias();
+        }
+    }
+});
+
+// Función para mostrar los docentes en la tabla
+function mostrarDocentes() {
+    const docentesList = document.getElementById('docentes-list');
+    docentesList.innerHTML = '';
+    docentes.forEach(docente => {
+        docentesList.innerHTML += `
+            <tr>
+                <td class="docente-id">${docente.id}</td>
+                <td class="docente-nombre">${docente.nombre}</td>
+                <td class="docente-apellido">${docente.apellido}</td> <!-- Mostramos el apellido -->
+                <td class="docente-correo">${docente.correo}</td> <!-- Mostramos el correo -->
+                <td>
+                    <button class="btn btn-sm btn-primary btn-editar">Editar</button>
+                    <button class="btn btn-sm btn-danger btn-eliminar">Eliminar</button>
+                </td>
+            </tr>
+        `;
+    });
+}
+
+// Función para mostrar las materias en la tabla
+function mostrarMaterias() {
+    const materiasList = document.getElementById('materias-list');
+    materiasList.innerHTML = '';
+    materias.forEach(materia => {
+        materiasList.innerHTML += `
+            <tr>
+                <td class="materia-id">${materia.id}</td>
+                <td class="materia-nombre">${materia.nombre}</td>
+                <td>
+                    <button class="btn btn-sm btn-primary btn-editar">Editar</button>
+                    <button class="btn btn-sm btn-danger btn-eliminar">Eliminar</button>
+                </td>
+            </tr>
+        `;
+    });
+}
+
+// Función para guardar datos en Local Storage
+function guardarDatosEnLocalStorage(clave, datos) {
+    localStorage.setItem(clave, JSON.stringify(datos));
+}
+
+// Llama a la función para inicializar la página al cargarla
+inicializarPagina();
