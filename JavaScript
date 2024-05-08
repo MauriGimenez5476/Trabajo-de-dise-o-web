@@ -1,4 +1,4 @@
-// Datos iniciales (puedes usar Local Storage para persistirlos)
+// Datos iniciales 
 let docentes = [];
 let materias = [];
 
@@ -85,7 +85,7 @@ document.getElementById('materia-form').addEventListener('submit', function (e) 
     mostrarMaterias();
 });
 
-// Event listener para la tabla de materias (delegación de eventos)
+// Event listener para la tabla de materias 
 document.getElementById('materias-list').addEventListener('click', function (e) {
     if (e.target.classList.contains('btn-editar')) {
         const fila = e.target.closest('tr');
