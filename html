@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplicación CRUD</title>
+    <!-- Agrega enlaces a Bootstrap y otros estilos aquí -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Aplicación CRUD para Docentes</h1>
+        <form id="docente-form">
+            <div class="form-group">
+                <input type="text" id="nombre" class="form-control" placeholder="Nombre">
+            </div>
+            <div class="form-group">
+                <input type="text" id="apellido" class="form-control" placeholder="Apellido"> <!-- Nuevo campo de apellido -->
+            </div>
+            <div class="form-group">
+                <input type="email" id="correo" class="form-control" placeholder="Correo electrónico"> <!-- Nuevo campo de correo -->
+            </div>
+            <!-- Otros campos aquí -->
+            <button type="submit" class="btn btn-primary">Agregar Docente</button>
+        </form>
+
+        <h1 class="mt-5">Aplicación CRUD para Materias</h1>
+        <form id="materia-form">
+            <div class="form-group">
+                <input type="text" id="materia-nombre" class="form-control" placeholder="Nombre de la Materia">
+            </div>
+            <!-- Otros campos aquí -->
+            <button type="submit" class="btn btn-primary">Agregar Materia</button>
+        </form>
+
+        <!-- Tablas para mostrar los datos -->
+        <div class="mt-5">
+            <h2>Docentes</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th> <!-- Nuevo encabezado de apellido -->
+                        <th>Correo</th> <!-- Nuevo encabezado de correo -->
+                        <!-- Otros encabezados aquí -->
+                    </tr>
+                </thead>
+                <tbody id="docentes-list"></tbody>
+            </table>
+        </div>
+
+        <div class="mt-5">
+            <h2>Materias</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <!-- Otros encabezados aquí -->
+                    </tr>
+                </thead>
+                <tbody id="materias-list"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
